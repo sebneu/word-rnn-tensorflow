@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <title>
+            My Personal Troll
+        </title>
+        <meta charset="utf-8">
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+    </head>
+
+    <script type=text/javascript>
+      $SCRIPT_ROOT = {{ request.script_root|tojson|safe }};
+    </script>
+
+    <body>
+        <h2>My Personal Troll</h2>
+        <p>
+            <input type=text name=textinput placeholder="Die FPÖ">
+            <button type="button" id="getfrominput">Get the troll's opinion!</button>
+        </p>
+        <p>
+            <button type="button" id="getrandom">I'm feeling lucky!</button>
+        </p>
+        <textarea id="result" cols="38" rows="5" readonly>
+        </textarea>
+    <!-- SCRIPTS -->
+        <script>
+          $(function() {
+            $('#getfrominput').click(function() {
+              $.getJSON($SCRIPT_ROOT + '/mytroll', {
+                q: $('input[name="textinput"]').val()
+              }, function(data) {
+                $("#result").text(data.result);
+              });
+              return false;
+            });
+          });
+
+          $(function() {
+            $('#getrandom').click(function() {
+              $.getJSON($SCRIPT_ROOT + '/mytroll', {}, function(data) {
+                $("#result").text(data.result);
+              });
+              return false;
+            });
+          });
+        </script>
+    </body>
+</html>
