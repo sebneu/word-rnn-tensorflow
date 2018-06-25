@@ -10,28 +10,31 @@
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
     </head>
 
-    <script type=text/javascript>
-      $SCRIPT_ROOT = {{ request.script_root|tojson|safe }};
-    </script>
 
     <body>
         <h2>My Personal Troll</h2>
         <p>
-            <input type=text name=textinput placeholder="Die FPÖ">
+            <input type=text name=textinput value="HC Strache">
             <button type="button" id="getfrominput">Get the troll's opinion!</button>
         </p>
         <p>
             <button type="button" id="getrandom">I'm feeling lucky!</button>
         </p>
-        <textarea id="result" cols="38" rows="5" readonly>
+        <textarea id="result" cols="38" rows="10" readonly>
         </textarea>
+
+
+        <h3>Background</h3>
+        <p>The idea is based on a <a href="https://medium.com/deep-writing/harry-potter-written-by-artificial-intelligence-8a9431803da6">blog post</a> where an LSTM Recurrent Neural Network was trained on the first four Harry Potter books.</p>
+        <p>Using their LSTM setup for <a href="https://github.com/hunkim/word-rnn-tensorflow">word-level language models</a>, this model is trained using a selected corpus of user postings/comments from an Austrian online newspaper.</p>
     <!-- SCRIPTS -->
         <script>
           $(function() {
             $('#getfrominput').click(function() {
-              $.getJSON($SCRIPT_ROOT + '/mytroll', {
+              $("#result").text("loading...");
+              $.getJSON('{{url_for('ui.mytroll')}}', {
                 q: $('input[name="textinput"]').val()
-              }, function(data) {
+              }).done(function(data) {
                 $("#result").text(data.result);
               });
               return false;
@@ -40,7 +43,8 @@
 
           $(function() {
             $('#getrandom').click(function() {
-              $.getJSON($SCRIPT_ROOT + '/mytroll', {}, function(data) {
+              $("#result").text("loading...");
+              $.getJSON('{{url_for('ui.mytroll')}}').done(function(data) {
                 $("#result").text(data.result);
               });
               return false;
